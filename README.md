@@ -118,3 +118,7 @@ DVDBA delivers **superior quality per pixel** compared to MP4 at equivalent sett
 ## License
 
 MIT — free to use, modify, and distribute.
+
+---
+
+**Русская версия:** [README.ru.md](README.ru.md)
