@@ -126,10 +126,10 @@ class EncodeTab(ttk.Frame):
         self.columnconfigure(1, weight=2)
 
         # Left panel - controls
-        left = ttk.LabelFrame(self, text="Settings", padding=15)
+        left = ttk.LabelFrame(self, text="Settings")
         left.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
 
-        ttk.Label(left, text="Input Video:").pack(anchor="w")
+        ttk.Label(left, text="Input Video:").pack(anchor="w", padx=10, pady=(10,0))
         self.inp_btn = ttk.Button(left, text="Browse...", command=self._browse_input)
         self.inp_btn.pack(fill="x", pady=(0, 10))
         self.inp_lbl = ttk.Label(left, text="No file selected", font=("Segoe UI", 9))
@@ -329,21 +329,21 @@ class DecodeTab(ttk.Frame):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=2)
 
-        left = ttk.LabelFrame(self, text="Settings", padding=15)
+        left = ttk.LabelFrame(self, text="Settings")
         left.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
 
-        ttk.Label(left, text="DVDBC File:").pack(anchor="w")
+        ttk.Label(left, text="DVDBC File:").pack(anchor="w", padx=10, pady=(10,0))
         self.inp_btn = ttk.Button(left, text="Browse...", command=self._browse)
-        self.inp_btn.pack(fill="x", pady=(0, 10))
+        self.inp_btn.pack(fill="x", padx=10, pady=(0, 10))
         self.inp_lbl = ttk.Label(left, text="No file selected", font=("Segoe UI", 9))
-        self.inp_lbl.pack(anchor="w", pady=(0, 10))
+        self.inp_lbl.pack(anchor="w", padx=10, pady=(0, 10))
 
         self.info_lbl = ttk.Label(left, text="", font=("Segoe UI", 9))
-        self.info_lbl.pack(anchor="w", pady=(0, 10))
+        self.info_lbl.pack(anchor="w", padx=10, pady=(0, 10))
 
         self.decode_btn = ttk.Button(left, text="Decode", bootstyle="success",
-                                      command=self._decode)
-        self.decode_btn.pack(fill="x", pady=5)
+                                       command=self._decode)
+        self.decode_btn.pack(fill="x", padx=10, pady=5)
 
         right = ttk.Frame(self)
         right.grid(row=0, column=1, sticky="nsew", padx=5, pady=5)
