@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+.env/
+
+# Temp test files
+test_*.mp4
+test_*.dvdbc
+demo_*.mp4
+demo_*.dvdbc
+dvdbc_quality_report.png
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config
+.dvdbarc

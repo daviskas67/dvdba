@@ -1,0 +1,5 @@
+numpy>=1.20
+scipy>=1.7
+opencv-python>=4.5
+ttkbootstrap>=1.20
+Pillow>=9.0
