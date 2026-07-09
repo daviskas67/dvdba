@@ -1,12 +1,53 @@
 {
   "name": "dvdba-codec",
   "version": "1.0.0",
-  "description": "DVDBA — Next-gen video codec. Beautiful desktop app.",
+  "description": "DVDBA — Next-gen video codec. Desktop application.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "npx electron .",
+    "build:win": "npx electron-builder --win --x64",
+    "build:linux": "npx electron-builder --linux",
+    "pack": "npx electron-builder --win --x64 --dir"
   },
-  "dependencies": {
-    "electron": "^28.0.0"
+  "build": {
+    "appId": "com.dvdba.codec",
+    "productName": "DVDBA Codec",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "python-backend/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "python-backend",
+        "to": "python-backend"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": null
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.13.0",
+    "electron-packager": "^17.1.2"
   }
 }

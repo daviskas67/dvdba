@@ -254,12 +254,12 @@ function handleEncodeMessage(msg) {
     document.getElementById('encode-btn').style.display = 'block';
     document.getElementById('cancel-btn').style.display = 'none';
     document.getElementById('encode-progress-fill').style.width = '100%';
-    document.getElementById('encode-status').textContent = 'Complete!';
+    document.getElementById('encode-status').textContent = '[OK] Complete!';
     document.getElementById('encode-detail').textContent = `${frames} frames • ${fmtTime(time)}`;
     document.getElementById('stat-frames').textContent = frames || '—';
     document.getElementById('stat-output').textContent = fmtSize(size || 0);
     document.getElementById('stat-speed').textContent = time ? (frames / time).toFixed(1) + ' fps' : '—';
-    document.getElementById('output-name').textContent = '✅ ' + (state.encode.outputPath || '').split(/[\\/]/).pop();
+    document.getElementById('output-name').textContent = '[OK] ' + (state.encode.outputPath || '').split(/[\\/]/).pop();
     document.getElementById('output-info').textContent = `${fmtSize(size || 0)}  •  ${frames} frames  •  ${fmtTime(time)}`;
     document.getElementById('output-card').style.display = 'block';
     toast('Encoding complete!', 'success');
@@ -298,7 +298,7 @@ function handleDecodeMessage(msg) {
   if (status === 'done') {
     state.decode.running = false;
     document.getElementById('decode-progress-fill').style.width = '100%';
-    document.getElementById('decode-status').textContent = '✅ Complete!';
+    document.getElementById('decode-status').textContent = '[OK] Complete!';
     toast('Decoding complete!', 'success');
   }
 
