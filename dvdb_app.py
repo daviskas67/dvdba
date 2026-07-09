@@ -840,7 +840,7 @@ class CompareTab(ttk.Frame):
         self.compare_btn.pack(side="right")
 
         # Original side
-        left = ttk.LabelFrame(self, text="  Original  ", padding=8)
+        left = ttk.LabelFrame(self, text="  Original  ")
         left.grid(row=1, column=0, sticky="nsew", padx=5, pady=(0, 5))
 
         self.orig_btn = ttk.Button(left, text="Browse Original",
@@ -866,7 +866,7 @@ class CompareTab(ttk.Frame):
         self.orig_stats.pack(anchor="w", pady=(4, 0))
 
         # Compressed side
-        right = ttk.LabelFrame(self, text="  DVDBC Decoded  ", padding=8)
+        right = ttk.LabelFrame(self, text="  DVDBC Decoded  ")
         right.grid(row=1, column=1, sticky="nsew", padx=5, pady=(0, 5))
 
         self.comp_btn = ttk.Button(right, text="Browse DVDBC",
