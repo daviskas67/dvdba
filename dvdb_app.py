@@ -114,8 +114,6 @@ class HeaderBar(ttk.Frame):
         # App icon (text-based)
         self.canvas.create_text(28, 26, text="DVDBA", anchor="w",
                                 fill="#00d4ff", font=("Segoe UI", 20, "bold"))
-        self.canvas.create_text(120, 32, text="PRO", anchor="w",
-                                fill="#7c4dff", font=("Segoe UI", 12, "bold"))
         self.canvas.create_text(28, 48, text="Video Codec Studio",
                                 anchor="w", fill="#6666aa",
                                 font=("Segoe UI", 9))
