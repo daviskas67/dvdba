@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DVDBA Codec</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Titlebar -->
+  <div id="titlebar">
+    <div id="titlebar-drag">
+      <div class="titlebar-icon">
+        <svg width="22" height="22" viewBox="0 0 80 80">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#00d4ff"/>
+              <stop offset="100%" style="stop-color:#7c4dff"/>
+            </linearGradient>
+          </defs>
+          <circle cx="40" cy="40" r="36" fill="none" stroke="url(#logo-grad)" stroke-width="4" opacity="0.3"/>
+          <circle cx="40" cy="40" r="28" fill="url(#logo-grad)" opacity="0.9"/>
+          <text x="40" y="48" text-anchor="middle" fill="#0d0d1a" font-family="Inter" font-weight="800" font-size="22">D</text>
+        </svg>
+      </div>
+      <span class="titlebar-title">DVDBA Codec</span>
+      <span class="titlebar-version">v1.0</span>
+    </div>
+    <div id="titlebar-controls">
+      <button class="tb-btn" onclick="window.electronAPI.minimize()">
+        <svg width="12" height="12" viewBox="0 0 12 1"><rect y="5" width="12" height="1" fill="currentColor"/></svg>
+      </button>
+      <button class="tb-btn" onclick="window.electronAPI.maximize()">
+        <svg width="12" height="12" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+      <button class="tb-btn tb-close" onclick="window.electronAPI.close()">
+        <svg width="12" height="12" viewBox="0 0 12 12"><line x1="1" y1="1" x2="11" y2="11" stroke="currentColor" stroke-width="1.5"/><line x1="11" y1="1" x2="1" y2="11" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div id="app">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div class="nav-item active" data-tab="encode" onclick="switchTab('encode')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16" fill="currentColor" stroke="none"/></svg>
+        <span>Encode</span>
+      </div>
+      <div class="nav-item" data-tab="decode" onclick="switchTab('decode')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polygon points="14 7 10 10 14 13" fill="currentColor" stroke="none"/></svg>
+        <span>Decode</span>
+      </div>
+      <div class="nav-item" data-tab="compare" onclick="switchTab('compare')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="9" height="18" rx="2"/><rect x="13" y="3" width="9" height="18" rx="2"/></svg>
+        <span>Compare</span>
+      </div>
+      <div class="nav-spacer"></div>
+      <div class="nav-item" data-tab="settings" onclick="switchTab('settings')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <span>Settings</span>
+      </div>
+    </nav>
+
+    <!-- Content Area -->
+    <main id="content">
+
+      <!-- ===== ENCODE TAB ===== -->
+      <div class="tab-content active" id="tab-encode">
+        <div class="tab-header">
+          <h1>Encode Video</h1>
+          <p class="subtitle">Compress video to DVDBC format with custom quality</p>
+        </div>
+
+        <div class="grid-2col">
+          <!-- Left Column -->
+          <div class="col">
+            <div class="card" id="source-card">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Source File
+              </div>
+              <div class="card-body">
+                <button class="btn btn-primary" onclick="browseEncode()">Browse Video</button>
+                <div id="encode-file-name" class="file-name">No file selected</div>
+                <div id="encode-file-info" class="file-info"></div>
+                <div id="encode-preview" class="preview-box">
+                  <div class="preview-placeholder">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"><rect x="2" y="2" width="20" height="16" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+                    <span>Preview</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c4dff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                Quality Settings
+              </div>
+              <div class="card-body">
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <span>Quality</span>
+                    <span class="slider-value" id="quality-value">50</span>
+                  </div>
+                  <input type="range" class="slider" id="quality-slider" min="1" max="100" value="50"
+                         oninput="updateQuality(this.value)">
+                  <div class="presets">
+                    <button class="preset-btn" data-q="10" onclick="setQuality(10)">Fast</button>
+                    <button class="preset-btn" data-q="30" onclick="setQuality(30)">Good</button>
+                    <button class="preset-btn active" data-q="50" onclick="setQuality(50)">High</button>
+                    <button class="preset-btn" data-q="80" onclick="setQuality(80)">Pro</button>
+                    <button class="preset-btn" data-q="100" onclick="setQuality(100)">Max</button>
+                  </div>
+                </div>
+                <div class="param-row">
+                  <label>Keyframe interval</label>
+                  <input type="number" class="param-input" id="kf-interval" value="30" min="1" max="300">
+                </div>
+                <button class="btn btn-success btn-action" id="encode-btn" onclick="startEncode()">
+                  <span class="btn-icon">▶</span>
+                  <span class="btn-text">Encode Video</span>
+                </button>
+                <button class="btn btn-secondary btn-action" id="cancel-btn" style="display:none" onclick="cancelEncode()">
+                  <span class="btn-icon">■</span>
+                  <span class="btn-text">Cancel</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="col">
+            <div class="card">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                Dashboard
+              </div>
+              <div class="card-body">
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <div class="stat-label">Progress</div>
+                    <div class="stat-value" id="stat-progress">0%</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-label">Frames</div>
+                    <div class="stat-value" id="stat-frames">—</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-label">Output</div>
+                    <div class="stat-value" id="stat-output">—</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-label">Speed</div>
+                    <div class="stat-value" id="stat-speed">—</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffab00" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Progress
+              </div>
+              <div class="card-body">
+                <div class="progress-bar" id="encode-progress">
+                  <div class="progress-fill" id="encode-progress-fill" style="width:0%"></div>
+                </div>
+                <div class="progress-status" id="encode-status">Ready</div>
+                <div class="progress-detail" id="encode-detail"></div>
+              </div>
+            </div>
+
+            <div class="card" id="output-card" style="display:none">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Output
+              </div>
+              <div class="card-body">
+                <div class="file-name" id="output-name"></div>
+                <div class="file-info" id="output-info"></div>
+                <button class="btn btn-info-link" onclick="openOutputFolder()">Open Folder</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DECODE TAB ===== -->
+      <div class="tab-content" id="tab-decode">
+        <div class="tab-header">
+          <h1>Decode Video</h1>
+          <p class="subtitle">Convert DVDBC files back to standard video formats</p>
+        </div>
+        <div class="grid-2col">
+          <div class="col">
+            <div class="card">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                DVDBC File
+              </div>
+              <div class="card-body">
+                <button class="btn btn-primary" onclick="browseDecode()">Open DVDBC File</button>
+                <div id="decode-file-name" class="file-name">No file selected</div>
+                <div id="decode-file-info" class="file-info"></div>
+                <div id="decode-meta" class="meta-box"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Decode
+              </div>
+              <div class="card-body">
+                <button class="btn btn-success btn-action" onclick="startDecode()">
+                  <span class="btn-icon">▶</span>
+                  <span class="btn-text">Decode to MP4</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c4dff" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                Preview
+              </div>
+              <div class="card-body">
+                <div id="decode-preview" class="preview-box" style="height:260px">
+                  <div class="preview-placeholder">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"><rect x="2" y="2" width="20" height="16" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+                    <span>Decoded Preview</span>
+                  </div>
+                </div>
+                <div class="progress-bar" id="decode-progress" style="display:none">
+                  <div class="progress-fill" id="decode-progress-fill" style="width:0%"></div>
+                </div>
+                <div class="progress-status" id="decode-status"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== COMPARE TAB ===== -->
+      <div class="tab-content" id="tab-compare">
+        <div class="tab-header">
+          <h1>Quality Comparison</h1>
+          <p class="subtitle">Compare original video against DVDBC compressed version</p>
+        </div>
+        <div class="grid-2col">
+          <div class="col">
+            <div class="card">
+              <div class="card-title card-title-2">
+                <span class="badge badge-orig">ORIGINAL</span>
+                Original Video
+              </div>
+              <div class="card-body">
+                <button class="btn btn-primary" onclick="browseCompareOrig()">Browse Original</button>
+                <div id="comp-orig-name" class="file-name">No file</div>
+                <div id="comp-orig-preview" class="preview-box" style="height:200px">
+                  <div class="preview-placeholder"><span>Original</span></div>
+                </div>
+                <div id="comp-orig-size" class="file-info"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="card-title card-title-2">
+                <span class="badge badge-dvdbc">DVDBC</span>
+                Compressed
+              </div>
+              <div class="card-body">
+                <button class="btn btn-primary" onclick="browseCompareDvdbc()">Browse DVDBC</button>
+                <div id="comp-dvdbc-name" class="file-name">No file</div>
+                <div id="comp-dvdbc-preview" class="preview-box" style="height:200px">
+                  <div class="preview-placeholder"><span>DVDBC Decoded</span></div>
+                </div>
+                <div id="comp-dvdbc-size" class="file-info"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;margin:16px 0">
+          <button class="btn btn-primary btn-action" onclick="startCompare()">
+            <span class="btn-icon">📊</span>
+            <span class="btn-text">Compare Quality</span>
+          </button>
+        </div>
+        <div id="compare-results" style="display:none">
+          <div class="results-bar">
+            <div class="result-item">
+              <div class="result-label">PSNR</div>
+              <div class="result-value" id="result-psnr">—</div>
+              <div class="result-unit">dB</div>
+            </div>
+            <div class="result-divider"></div>
+            <div class="result-item">
+              <div class="result-label">SSIM</div>
+              <div class="result-value" id="result-ssim">—</div>
+              <div class="result-unit"></div>
+            </div>
+            <div class="result-divider"></div>
+            <div class="result-item">
+              <div class="result-label">Compression</div>
+              <div class="result-value" id="result-ratio">—</div>
+              <div class="result-unit">×</div>
+            </div>
+            <div class="result-divider"></div>
+            <div class="result-item">
+              <div class="result-label">Frames</div>
+              <div class="result-value" id="result-frames">—</div>
+              <div class="result-unit"></div>
+            </div>
+          </div>
+          <div class="progress-status" id="compare-status"></div>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS TAB ===== -->
+      <div class="tab-content" id="tab-settings">
+        <div class="tab-header">
+          <h1>Settings</h1>
+          <p class="subtitle">Application preferences</p>
+        </div>
+        <div class="card" style="max-width:500px">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c4dff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            Preferences
+          </div>
+          <div class="card-body">
+            <div class="param-row">
+              <label>Theme</label>
+              <select class="param-input" id="theme-select" onchange="setTheme(this.value)">
+                <option value="dark">Dark Nebula</option>
+                <option value="deep">Deep Ocean</option>
+                <option value="midnight">Midnight</option>
+                <option value="light">Crystal Light</option>
+              </select>
+            </div>
+            <div class="param-row">
+              <label>Default output directory</label>
+              <input type="text" class="param-input" id="default-outdir" value="">
+            </div>
+            <div class="param-row">
+              <label>Default quality</label>
+              <input type="number" class="param-input" id="default-quality" value="50" min="1" max="100">
+            </div>
+            <button class="btn btn-success" onclick="saveSettings()">Save Settings</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

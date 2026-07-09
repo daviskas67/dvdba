@@ -1,0 +1,12 @@
+{
+  "name": "dvdba-codec",
+  "version": "1.0.0",
+  "description": "DVDBA — Next-gen video codec. Beautiful desktop app.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^28.0.0"
+  }
+}

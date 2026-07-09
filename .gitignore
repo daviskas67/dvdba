@@ -28,3 +28,7 @@ Thumbs.db
 
 # Config
 .dvdbarc
+
+# Electron
+dvdba-electron/node_modules/
+dvdba-electron/dist/
