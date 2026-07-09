@@ -1,4 +1,4 @@
-# DVDBA — Davis Digital Video Broadcast Architecture
+# DVDBA — Daviskas Digital Video Broadcast Architecture
 
 **A next-gen video codec built from scratch that challenges MP4 in both quality and size.**
 
